@@ -22,18 +22,21 @@ export async function GET(request: Request) {
             noCheckCertificates: true,
             noWarnings: true,
             preferFreeFormats: true,
-            noPlaylist: true,
-            addHeader: [
-                'referer:youtube.com',
-                'user-agent:Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-            ]
+            noPlaylist: true
         });
 
         return NextResponse.json(output);
     } catch (error: any) {
         console.error('yt-dlp error:', error);
+        
+        // Extract the most useful error message
+        const errorMessage = error.stderr || error.message || String(error) || 'Failed to process video.';
+        
+        // Clean up common yt-dlp error prefixes for the UI
+        const cleanMessage = errorMessage.replace('ERROR:', '').trim();
+        
         return NextResponse.json(
-            { error: error.message || 'Failed to process video.', details: error.message },
+            { error: cleanMessage, details: errorMessage },
             { status: 500 }
         );
     }
