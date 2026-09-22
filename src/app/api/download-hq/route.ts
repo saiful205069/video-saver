@@ -1,10 +1,24 @@
 import { NextResponse } from 'next/server';
 import { trackAction } from '@/lib/stats';
-import youtubedl from 'youtube-dl-exec';
+import { create } from 'youtube-dl-exec';
 import path from 'path';
 import fs from 'fs';
 import os from 'os';
-import ffmpegStatic from 'ffmpeg-static';
+
+const isWindows = os.platform() === 'win32';
+const ytDlpPath = path.join(process.cwd(), 'node_modules', 'youtube-dl-exec', 'bin', isWindows ? 'yt-dlp.exe' : 'yt-dlp');
+const ffmpegPath = path.join(process.cwd(), 'node_modules', 'ffmpeg-static', isWindows ? 'ffmpeg.exe' : 'ffmpeg');
+
+try {
+  if (!isWindows) {
+    fs.chmodSync(ytDlpPath, '755');
+    fs.chmodSync(ffmpegPath, '755');
+  }
+} catch (e) {
+  console.log('Could not set binary permissions');
+}
+
+const youtubedl = create(ytDlpPath);
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -32,7 +46,7 @@ export async function GET(request: Request) {
   try {
     const options: any = {
       f: needsMerge ? `${formatId}+bestaudio[ext=m4a]` : formatId,
-      ffmpegLocation: ffmpegStatic || undefined,
+      ffmpegLocation: ffmpegPath,
       concurrentFragments: 4,
       noPlaylist: true,
       o: tempOutputPath,

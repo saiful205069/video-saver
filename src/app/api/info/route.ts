@@ -1,8 +1,22 @@
 import { NextResponse } from 'next/server';
-import youtubedl from 'youtube-dl-exec';
+import { create } from 'youtube-dl-exec';
 import { trackAction } from '@/lib/stats';
+import path from 'path';
 import os from 'os';
-import { chmodSync } from 'fs';
+import fs from 'fs';
+
+const isWindows = os.platform() === 'win32';
+const ytDlpPath = path.join(process.cwd(), 'node_modules', 'youtube-dl-exec', 'bin', isWindows ? 'yt-dlp.exe' : 'yt-dlp');
+
+try {
+  if (!isWindows) {
+    fs.chmodSync(ytDlpPath, '755');
+  }
+} catch (e) {
+  console.log('Could not set permissions for yt-dlp binary');
+}
+
+const youtubedl = create(ytDlpPath);
 
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
@@ -29,8 +43,11 @@ export async function GET(request: Request) {
     } catch (error: any) {
         console.error('yt-dlp error:', error);
         
-        // Extract the most useful error message
-        const errorMessage = error.stderr || error.message || String(error) || 'Failed to process video.';
+        let errorMessage = 'Failed to process video.';
+        if (error.stderr) errorMessage = error.stderr;
+        else if (error.message) errorMessage = error.message;
+        else if (error.code) errorMessage = `System Error: ${error.syscall || 'spawn'} ${error.code} - The video downloader binary might be missing or blocked on this server.`;
+        else errorMessage = String(error);
         
         // Clean up common yt-dlp error prefixes for the UI
         const cleanMessage = errorMessage.replace('ERROR:', '').trim();

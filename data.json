@@ -1,15 +1,45 @@
 {
   "stats": {
-    "visits": 28,
+    "visits": 42,
     "dailyVisits": {
-      "2026-09-22": 22
+      "2026-09-22": 36
     },
     "monthlyVisits": {
-      "2026-09": 22
+      "2026-09": 36
     },
-    "searches": 2,
+    "searches": 8,
     "downloads": 2,
     "recentActivity": [
+      {
+        "type": "search",
+        "url": "https://youtu.be/prrmQ4RtMpA?si=3AovEPO9dM7LeLLL",
+        "time": "2026-09-22T22:15:53.722Z"
+      },
+      {
+        "type": "search",
+        "url": "https://youtu.be/prrmQ4RtMpA?si=3AovEPO9dM7LeLLL",
+        "time": "2026-09-22T22:13:12.435Z"
+      },
+      {
+        "type": "search",
+        "url": "https://youtu.be/prrmQ4RtMpA?si=3AovEPO9dM7LeLLL",
+        "time": "2026-09-22T22:13:12.345Z"
+      },
+      {
+        "type": "search",
+        "url": "https://youtu.be/prrmQ4RtMpA?si=3AovEPO9dM7LeLLL",
+        "time": "2026-09-22T22:12:54.545Z"
+      },
+      {
+        "type": "search",
+        "url": "https://youtu.be/prrmQ4RtMpA?si=3AovEPO9dM7LeLLL",
+        "time": "2026-09-22T22:12:53.723Z"
+      },
+      {
+        "type": "search",
+        "url": "https://youtu.be/prrmQ4RtMpA?si=3AovEPO9dM7LeLLL",
+        "time": "2026-09-22T22:12:47.005Z"
+      },
       {
         "type": "download",
         "url": "https://youtu.be/prrmQ4RtMpA?si=qR-jiJn-5ATT0tfC",
