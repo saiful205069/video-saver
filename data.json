@@ -1,0 +1,39 @@
+{
+  "stats": {
+    "visits": 18,
+    "dailyVisits": {
+      "2026-09-22": 12
+    },
+    "monthlyVisits": {
+      "2026-09": 12
+    },
+    "searches": 2,
+    "downloads": 2,
+    "recentActivity": [
+      {
+        "type": "download",
+        "url": "https://youtu.be/prrmQ4RtMpA?si=qR-jiJn-5ATT0tfC",
+        "time": "2026-09-22T21:01:55.350Z"
+      },
+      {
+        "type": "search",
+        "url": "https://youtu.be/prrmQ4RtMpA?si=qR-jiJn-5ATT0tfC",
+        "time": "2026-09-22T21:01:48.629Z"
+      },
+      {
+        "type": "download",
+        "url": "https://youtu.be/ri1Ar5nEq4s?si=GFb0nCLAt_o4as3j",
+        "time": "2026-09-22T21:00:05.589Z"
+      },
+      {
+        "type": "search",
+        "url": "https://youtu.be/ri1Ar5nEq4s?si=GFb0nCLAt_o4as3j",
+        "time": "2026-09-22T20:59:57.493Z"
+      }
+    ]
+  },
+  "config": {
+    "siteName": "VideoSaver",
+    "siteColor": "emerald"
+  }
+}

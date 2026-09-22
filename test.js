@@ -1,0 +1,1 @@
+const cp = require('child_process'); cp.execSync('"C:/Users/saiful islam/Pictures/next-video-downloader/node_modules/youtube-dl-exec/bin/yt-dlp.exe" -f "243+bestaudio" --ffmpeg-location "C:/Users/saiful islam/Pictures/next-video-downloader/node_modules/ffmpeg-static/ffmpeg.exe" -o "test_output.mkv" "https://youtu.be/__bHEfJ29j0"', {stdio: 'inherit'});
