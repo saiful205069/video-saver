@@ -686,6 +686,7 @@ export default function Home() {
                 </span>
               </div>
               <p className="text-sm text-gray-500">© 2008-2026</p>
+              <p className="text-sm text-gray-500 mt-1 font-medium">Developer by Saiful</p>
               
               {/* Language Selector */}
               <div className="relative mt-2">

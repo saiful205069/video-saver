@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { trackAction } from '@/lib/stats';
-import { exec } from 'child_process';
+import youtubedl from 'youtube-dl-exec';
 import path from 'path';
 import fs from 'fs';
 import os from 'os';
@@ -18,9 +18,6 @@ export async function GET(request: Request) {
 
   // Track the download
   trackAction('download', url);
-
-  const ytDlpPath = path.join(process.cwd(), 'node_modules', 'youtube-dl-exec', 'bin', 'yt-dlp.exe');
-  const ffmpegPath = path.join(process.cwd(), 'node_modules', 'ffmpeg-static', 'ffmpeg.exe');
   
   const needsMerge = searchParams.get('merge') === 'true';
 
@@ -33,25 +30,19 @@ export async function GET(request: Request) {
   const tempOutputPath = path.join(tempDir, `video.%(ext)s`);
 
   try {
-    let cmd = '';
+    const options: any = {
+      f: needsMerge ? `${formatId}+bestaudio[ext=m4a]` : formatId,
+      ffmpegLocation: ffmpegStatic || undefined,
+      concurrentFragments: 4,
+      noPlaylist: true,
+      o: tempOutputPath,
+    };
+
     if (needsMerge) {
-      // Force mp4 merging and ensure audio is aac for universal compatibility
-      cmd = `"${ytDlpPath}" -f "${formatId}+bestaudio[ext=m4a]" --ffmpeg-location "${ffmpegPath}" --merge-output-format mp4 --concurrent-fragments 4 --no-playlist -o "${tempOutputPath}" "${url}"`;
-    } else {
-      // Direct download of the format
-      cmd = `"${ytDlpPath}" -f "${formatId}" --ffmpeg-location "${ffmpegPath}" --concurrent-fragments 4 --no-playlist -o "${tempOutputPath}" "${url}"`;
+      options.mergeOutputFormat = 'mp4';
     }
     
-    await new Promise((resolve, reject) => {
-      exec(cmd, (error, stdout, stderr) => {
-        if (error) {
-          console.error('yt-dlp exec error:', stderr);
-          reject(error);
-        } else {
-          resolve(stdout);
-        }
-      });
-    });
+    await youtubedl(url, options);
 
     // Find the downloaded file in the temp directory
     const files = fs.readdirSync(tempDir);
@@ -97,8 +88,8 @@ export async function GET(request: Request) {
       },
     });
   } catch (error: any) {
-    console.error('HQ Download Error:', error);
+    console.error('Download error:', error);
     fs.rmSync(tempDir, { recursive: true, force: true });
-    return NextResponse.json({ error: 'Failed to process HQ video. Please try another format.' }, { status: 500 });
+    return NextResponse.json({ error: error.message || 'Download failed', details: error.message }, { status: 500 });
   }
 }

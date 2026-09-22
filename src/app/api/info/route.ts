@@ -1,10 +1,8 @@
 import { NextResponse } from 'next/server';
-import { create } from 'youtube-dl-exec';
+import youtubedl from 'youtube-dl-exec';
 import { trackAction } from '@/lib/stats';
-import path from 'path';
-
-const ytDlpPath = path.join(process.cwd(), 'node_modules', 'youtube-dl-exec', 'bin', 'yt-dlp.exe');
-const youtubedl = create(ytDlpPath);
+import os from 'os';
+import { chmodSync } from 'fs';
 
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
@@ -35,7 +33,7 @@ export async function GET(request: Request) {
     } catch (error: any) {
         console.error('yt-dlp error:', error);
         return NextResponse.json(
-            { error: 'Failed to process video. It might be private or unsupported.', details: error.message },
+            { error: error.message || 'Failed to process video.', details: error.message },
             { status: 500 }
         );
     }
