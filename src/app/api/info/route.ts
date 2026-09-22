@@ -26,18 +26,26 @@ export async function GET(request: Request) {
         return NextResponse.json({ error: 'URL is required' }, { status: 400 });
     }
 
+    const options: any = {
+        dumpSingleJson: true,
+        noCheckCertificates: true,
+        noWarnings: true,
+        preferFreeFormats: true,
+        noPlaylist: true,
+        extractorArgs: 'youtube:player_client=ios,web'
+    };
+
+    const cookiesPath = path.join(process.cwd(), 'cookies.txt');
+    if (fs.existsSync(cookiesPath)) {
+        options.cookies = cookiesPath;
+    }
+
     try {
         // Track the search
         trackAction('search', url);
         
         // Run yt-dlp to fetch video metadata
-        const output = await youtubedl(url, {
-            dumpSingleJson: true,
-            noCheckCertificates: true,
-            noWarnings: true,
-            preferFreeFormats: true,
-            noPlaylist: true
-        });
+        const output = await youtubedl(url, options);
 
         return NextResponse.json(output);
     } catch (error: any) {

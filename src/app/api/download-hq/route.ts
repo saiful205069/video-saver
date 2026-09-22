@@ -50,7 +50,13 @@ export async function GET(request: Request) {
       concurrentFragments: 4,
       noPlaylist: true,
       o: tempOutputPath,
+      extractorArgs: 'youtube:player_client=ios,web'
     };
+
+    const cookiesPath = path.join(process.cwd(), 'cookies.txt');
+    if (fs.existsSync(cookiesPath)) {
+      options.cookies = cookiesPath;
+    }
 
     if (needsMerge) {
       options.mergeOutputFormat = 'mp4';
